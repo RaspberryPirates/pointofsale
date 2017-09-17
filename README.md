@@ -16,5 +16,7 @@ The inventory can be initially mocked using the script src/test/shell/create-pro
 
 ## TODO
 User 'scans' product, triggers query for product, displays information, updates total due.
+
 Upon 'checkout', listen (separate process/app?) for magnetic stripe reader (MSR) to be used, 'process payment', relay card information on web page.
+
 Secure the whole thing.
