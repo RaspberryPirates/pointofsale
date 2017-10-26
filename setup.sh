@@ -1,5 +1,6 @@
 #!/bin/bash
-apt-get install maven
+sudo apt-get update
+sudo apt-get install maven
 
 cd floreantpos-code
 
