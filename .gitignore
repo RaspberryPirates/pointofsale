@@ -26,3 +26,6 @@ nbdist/
 
 ### Eclipse ###
 bin/
+
+### Vim ###
+*.swp
