@@ -15,8 +15,8 @@ mkdir -p $INSTALL_DIR
 chown -R $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR
 
 echo "Package updates and installations."
-#apt-get --assume-yes update
-#apt-get --assume-yes install zip clamav logwatch
+apt-get --assume-yes update
+apt-get --assume-yes install zip clamav logwatch
 
 # Turn off SSH by non-pem
 echo "Update SSH rules."
