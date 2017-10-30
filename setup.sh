@@ -7,7 +7,7 @@ fi
 
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-INSTALL_DIR=$HOME/apps
+INSTALL_DIR=/home/$DEFAULT_USER/apps
 DEFAULT_USER=pi
 
 echo "Making install directory: $INSTALL_DIR ."
@@ -28,7 +28,7 @@ unzip $BASE_DIR/floreant-raspbian-demo.zip -d $INSTALL_DIR
 sudo chown $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
 
 echo "Switching users: $DEFAULT_USER ."
-su $DEFAULT_USER <<'EOF'
+su $DEFAULT_USER <<EOF
 cd $INSTALL_DIR/floreantpos
 
 JAVA_OPTS="-Xms64m -Xmx512m"
