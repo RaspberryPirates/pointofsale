@@ -1,22 +1,29 @@
 #!/bin/bash
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 INSTALL_DIR=$HOME/apps
 DEFAULT_USER=pi
 
 mkdir -p $INSTALL_DIR
+chown -R $DEFAULT_USER:$DEFAULT_USER
 
-sudo apt-get update
-sudo apt-get install openjdk-8-jre zip clamav logwatch
+#apt-get --assume-yes update
+#apt-get --assume-yes install openjdk-8-jre zip clamav logwatch
 
 # Turn off SSH by non-pem
-sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
-sudo sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 unzip $BASE_DIR/floreant-raspbian-demo.zip -d $INSTALL_DIR
-chown $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
+sudo chown $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
 
-sudo su - $DEFAULT_USER
+su - $DEFAULT_USER
 
 cd $INSTALL_DIR/floreantpos
 
