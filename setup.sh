@@ -28,12 +28,12 @@ unzip $BASE_DIR/floreant-raspbian-demo.zip -d $INSTALL_DIR
 sudo chown $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
 
 echo "Switching users: $DEFAULT_USER ."
-su - $DEFAULT_USER
-
+su $DEFAULT_USER <<'EOF'
 cd $INSTALL_DIR/floreantpos
 
 JAVA_OPTS="-Xms64m -Xmx512m"
 
 # Run Floreant POS
 echo "Running FloreantPOS."
-/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java $JAVA_OPTS -jar ./floreantpos.jar 
+/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/bin/java $JAVA_OPTS -jar ./floreantpos.jar
+EOF
