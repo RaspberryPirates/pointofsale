@@ -7,8 +7,8 @@ fi
 
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-INSTALL_DIR=/home/$DEFAULT_USER/apps
 DEFAULT_USER=pi
+INSTALL_DIR=/home/$DEFAULT_USER/apps
 
 echo "Making install directory: $INSTALL_DIR ."
 mkdir -p $INSTALL_DIR
