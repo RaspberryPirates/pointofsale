@@ -50,7 +50,7 @@ sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 echo "Unpack FloreantPOS."
 unzip $BASE_DIR/floreant-raspbian-demo.zip -d $INSTALL_DIR
-sudo chown $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
+sudo chown -R $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
 
 echo "Switching users: $DEFAULT_USER ."
 su $DEFAULT_USER <<EOF
