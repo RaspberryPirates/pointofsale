@@ -1,0 +1,100 @@
+wes@ADELE-9350:~$ nmap -A -v -sV pi3-personal
+
+Starting Nmap 7.01 ( https://nmap.org ) at 2017-11-19 12:57 EST
+NSE: Loaded 132 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 12:57
+Completed NSE at 12:57, 0.00s elapsed
+Initiating NSE at 12:57
+Completed NSE at 12:57, 0.00s elapsed
+Initiating Ping Scan at 12:57
+Scanning pi3-personal (192.168.1.200) [2 ports]
+Completed Ping Scan at 12:57, 0.01s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 12:57
+Completed Parallel DNS resolution of 1 host. at 12:57, 0.01s elapsed
+Initiating Connect Scan at 12:57
+Scanning pi3-personal (192.168.1.200) [1000 ports]
+Discovered open port 21/tcp on 192.168.1.200
+Discovered open port 22/tcp on 192.168.1.200
+Completed Connect Scan at 12:57, 1.81s elapsed (1000 total ports)
+Initiating Service scan at 12:57
+Scanning 2 services on pi3-personal (192.168.1.200)
+Completed Service scan at 12:57, 6.01s elapsed (2 services on 1 host)
+NSE: Script scanning 192.168.1.200.
+Initiating NSE at 12:57
+Completed NSE at 12:58, 6.09s elapsed
+Initiating NSE at 12:58
+Completed NSE at 12:58, 0.00s elapsed
+Nmap scan report for pi3-personal (192.168.1.200)
+Host is up (0.018s latency).
+Not shown: 998 closed ports
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     Pure-FTPd
+22/tcp open  ssh     (protocol 2.0)
+| ssh-hostkey: 
+|   1024 ff:82:45:1f:d6:6f:b8:11:2a:74:e1:da:7c:57:37:41 (DSA)
+|   2048 b2:00:87:a8:8e:cc:23:82:67:17:3b:0f:71:76:1c:70 (RSA)
+|_  256 5b:77:fc:d3:26:c6:f3:c1:52:64:e7:cd:61:bd:05:d1 (ECDSA)
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port22-TCP:V=7.01%I=7%D=11/19%Time=5A11C627%P=x86_64-pc-linux-gnu%r(NUL
+SF:L,29,"SSH-2\.0-OpenSSH_6\.7p1\x20Raspbian-5\+deb8u3\r\n");
+
+NSE: Script Post-scanning.
+Initiating NSE at 12:58
+Completed NSE at 12:58, 0.00s elapsed
+Initiating NSE at 12:58
+Completed NSE at 12:58, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 14.57 seconds
+
+After turning off ftp
+
+
+wes@ADELE-9350:~$ nmap -A -v -sV pi3-personal
+
+Starting Nmap 7.01 ( https://nmap.org ) at 2017-11-19 13:00 EST
+NSE: Loaded 132 scripts for scanning.
+NSE: Script Pre-scanning.
+Initiating NSE at 13:00
+Completed NSE at 13:00, 0.00s elapsed
+Initiating NSE at 13:00
+Completed NSE at 13:00, 0.00s elapsed
+Initiating Ping Scan at 13:00
+Scanning pi3-personal (192.168.1.200) [2 ports]
+Completed Ping Scan at 13:00, 0.01s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 13:00
+Completed Parallel DNS resolution of 1 host. at 13:00, 0.04s elapsed
+Initiating Connect Scan at 13:00
+Scanning pi3-personal (192.168.1.200) [1000 ports]
+Discovered open port 22/tcp on 192.168.1.200
+Completed Connect Scan at 13:00, 2.03s elapsed (1000 total ports)
+Initiating Service scan at 13:00
+Scanning 1 service on pi3-personal (192.168.1.200)
+Completed Service scan at 13:00, 6.01s elapsed (1 service on 1 host)
+NSE: Script scanning 192.168.1.200.
+Initiating NSE at 13:00
+Completed NSE at 13:00, 1.09s elapsed
+Initiating NSE at 13:00
+Completed NSE at 13:00, 0.00s elapsed
+Nmap scan report for pi3-personal (192.168.1.200)
+Host is up (0.029s latency).
+Not shown: 999 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     (protocol 2.0)
+| ssh-hostkey: 
+|   1024 ff:82:45:1f:d6:6f:b8:11:2a:74:e1:da:7c:57:37:41 (DSA)
+|   2048 b2:00:87:a8:8e:cc:23:82:67:17:3b:0f:71:76:1c:70 (RSA)
+|_  256 5b:77:fc:d3:26:c6:f3:c1:52:64:e7:cd:61:bd:05:d1 (ECDSA)
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port22-TCP:V=7.01%I=7%D=11/19%Time=5A11C6B5%P=x86_64-pc-linux-gnu%r(NUL
+SF:L,29,"SSH-2\.0-OpenSSH_6\.7p1\x20Raspbian-5\+deb8u3\r\n");
+
+NSE: Script Post-scanning.
+Initiating NSE at 13:00
+Completed NSE at 13:00, 0.00s elapsed
+Initiating NSE at 13:00
+Completed NSE at 13:00, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 9.78 seconds
