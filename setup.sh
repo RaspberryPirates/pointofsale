@@ -105,6 +105,7 @@ auditctl -a always,exit -F arch=b32 -F uid=pi -S execve -k programs -k piaction
 auditctl -f 2
 # Lock auditing
 auditctl -e 2
+service restart auditd.service
 
 # Install FloreantPOS
 echo "Unpack FloreantPOS."
