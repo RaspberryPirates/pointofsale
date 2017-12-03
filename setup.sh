@@ -7,8 +7,15 @@ fi
 
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DEFAULT_USER=pi
+DEFAULT_USER=floreantpos_user
 INSTALL_DIR=/home/$DEFAULT_USER/apps
+
+# Check if user exists
+if [ ! $(getent passwd $DEFAULT_USER) ]; then
+	echo "Creating OS user."
+	groupadd $DEFAULT_USER
+	useradd $DEFAULT_USER -r -s /bin/bash -c FloreantPOS -g $DEFAULT_USER
+fi
 
 echo "Making install directory: $INSTALL_DIR ."
 mkdir -p $INSTALL_DIR
@@ -48,40 +55,32 @@ apt-get -y update
 #	Utilities: vim, zip
 #	Antivirus: clamav
 # 	IDS: Snort (requires bison, flex, pcre)
-apt-get -y install vim \
-	zip \
-	clamav \
-	logwatch \
-	bison \
-	flex \
-	libpcap-dev \
-	libpcre3-dev \
-	libdumbnet-dev \
-	checkinstall \
-	auditd
+apt-get -y install vim zip clamav logwatch bison flex libpcap-dev libpcre3-dev libdumbnet-dev checkinstall auditd
 
 # Install Snort
-mkdir -p $INSTALL_DIR/snort_setup
-wget https://snort.org/downloads/snort/daq-2.0.6.tar.gz -P $INSTALL_DIR/snort_setup/
-wget https://snort.org/downloads/snort/snort-2.9.8.3.tar.gz -P $INSTALL_DIR/snort_setup/
-tar xf daq-2.0.6.tar.gz -C $INSTALL_DIR/snort_setup/
-tar xf snort-2.9.8.3.tar.gz -C $INSTALL_DIR/snort_setup/
-cd $INSTALL_DIR/snort_setup/daq-2.0.6/
-./configure
-make
-checkinstall -D --install=no --fstrans=no
-dpkg -i daw_2.0.6-1_armfh.deb
-cd $INSTALL_DIR/snort_setup/snort-2.9.8.3/
-./configure --enable-sourcefire
-make
-checkinstall -D --install=no --fstrans=no
-dpkg -i snort_2.9.8.3-1_armhf.deb
-ln -s /usr/local/bin/snort /usr/sbin/snort
-groupadd snort
-useradd snort -r -s /sbin/nologin -c SNORT_IDS -g snort
-mkdir -p /etc/snort/rules/iplists /etc/snort/preproc_rules /usr/local/lib/snort_dynamicrules /etc/snort/so_rules /var/log/snort
-cp $INSTALL_DIR/snort_setup/snort-2.9.8.3/etc/*.{conf,config,map} /etc/snort/
-chown -R snort:snort /etc/snort/ /var/log/snort/ /usr/local/lib/snort_dynamicrules
+if [ ! $(command -v snort) ]; then
+	mkdir -p $INSTALL_DIR/snort_setup
+	wget https://snort.org/downloads/archive/snort/daq-2.0.6.tar.gz -P $INSTALL_DIR/snort_setup/
+	wget https://snort.org/downloads/archive/snort/snort-2.9.8.3.tar.gz -P $INSTALL_DIR/snort_setup/
+	tar xf daq-2.0.6.tar.gz -C $INSTALL_DIR/snort_setup/
+	tar xf snort-2.9.8.3.tar.gz -C $INSTALL_DIR/snort_setup/
+	cd $INSTALL_DIR/snort_setup/daq-2.0.6/
+	./configure
+	make
+	checkinstall -D --install=no --fstrans=no
+	dpkg -i daw_2.0.6-1_armfh.deb
+	cd $INSTALL_DIR/snort_setup/snort-2.9.8.3/
+	./configure --enable-sourcefire
+	make
+	checkinstall -D --install=no --fstrans=no
+	dpkg -i snort_2.9.8.3-1_armhf.deb
+	ln -s /usr/local/bin/snort /usr/sbin/snort
+	groupadd snort
+	useradd snort -r -s /usr/sbin/nologin -c SNORT_IDS -g snort
+	mkdir -p /etc/snort/rules/iplists /etc/snort/preproc_rules /usr/local/lib/snort_dynamicrules /etc/snort/so_rules /var/log/snort
+	cp $INSTALL_DIR/snort_setup/snort-2.9.8.3/etc/*.{conf,config,map} /etc/snort/
+	chown -R snort:snort /etc/snort/ /var/log/snort/ /usr/local/lib/snort_dynamicrules
+fi
 
 # run snort:
 ## snort‬‬ ‫‪-dev‬‬ ‫‪-i‬‬ ‫‪wlan0‬‬ ‫‪-c‬‬ ‫‪/etc/snort/snort.conf‬‬ ‫‪-l‬‬ ‫‪/var/log/snort/‬‬ ‫‪-A‬‬ ‫‪full‬‬
@@ -94,13 +93,15 @@ service rsyslog stop
 # Turn off SSH by non-pem
 echo "Update SSH rules."
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
-sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+#sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
+# Clear existing rules
+auditctl -D
 # Audit import OS files
 auditctl -w /etc/passwd -p wa -k passwd_watch
-# Log all commands by root and pi
+# Log all commands by root and app account
 auditctl -a always,exit -F arch=b32 -F uid=root -S execve -k programs -k rootaction
-auditctl -a always,exit -F arch=b32 -F uid=pi -S execve -k programs -k piaction
+auditctl -a always,exit -F arch=b32 -F uid=$DEFAULT_USER -S execve -k programs -k piaction
 # Panic on critical errors
 auditctl -f 2
 # Lock auditing
@@ -108,9 +109,12 @@ auditctl -e 2
 service restart auditd.service
 
 # Install FloreantPOS
-echo "Unpack FloreantPOS."
-unzip $BASE_DIR/floreant-raspbian-demo.zip -d $INSTALL_DIR
-sudo chown -R $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
+if [ ! -f $INSTALL_DIR/floreantpos/floreantpos.jar ]; then
+	echo "Unpack FloreantPOS."
+	wget https://github.com/RaspberryPirates/pointofsale/raw/master/floreant-raspbian-demo.zip -P $BASE_DIR/
+	unzip $BASE_DIR/floreant-raspbian-demo.zip -d $INSTALL_DIR
+	chown -R $DEFAULT_USER:$DEFAULT_USER $INSTALL_DIR/floreantpos
+fi
 
 # Launch FloreantPOS
 echo "Switching users: $DEFAULT_USER ."
