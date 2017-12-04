@@ -83,7 +83,7 @@ if [ ! $(command -v snort) ]; then
 fi
 
 # run snort:
-## snort‬‬ ‫‪-dev‬‬ ‫‪-i‬‬ ‫‪wlan0‬‬ ‫‪-c‬‬ ‫‪/etc/snort/snort.conf‬‬ ‫‪-l‬‬ ‫‪/var/log/snort/‬‬ ‫‪-A‬‬ ‫‪full‬‬
+nohup snort‬‬ ‫‪-dev‬‬ ‫‪-i‬‬ ‫‪wlan0‬‬ ‫‪-c‬‬ ‫‪/etc/snort/snort.conf‬‬ ‫‪-l‬‬ ‫‪/var/log/snort/‬‬ ‫‪-A‬‬ ‫‪full‬‬ >/dev/null 2>&1 &
 
 # turn off services
 service bluetooth stop
@@ -93,7 +93,7 @@ service rsyslog stop
 # Turn off SSH by non-pem
 echo "Update SSH rules."
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
-#sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+sed -i -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 # Clear existing rules
 auditctl -D
